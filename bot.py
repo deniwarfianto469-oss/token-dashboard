@@ -51,5 +51,8 @@ def main():
 
     print("Tes koneksi selesai. Belum ada transaksi trading.")
 
-if __name__ == "__main__":
-    main()
+if if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print("ERROR BOT:", repr(e))
