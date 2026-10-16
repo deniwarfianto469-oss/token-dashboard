@@ -1,54 +1,37 @@
 
-<script>
-async function loadMarket() {
-  const el = id => document.getElementById(id);
-  const token = "0x6abbaE6B3086e6502fb447D6F1D1d5Dc18d43428";
-  const pairAddress = "0xa42089070f4e8078debbee9bb272cf8b4ecc5fea";
-
-  el("status").textContent = "Mengambil data DRFT/WETH...";
-
-  try {
-    const url =
-      "https://api.dexscreener.com/token-pairs/v1/robinhood/" + token;
-
-    const response = await fetch(url);
-    if (!response.ok) throw Error("API tidak tersedia");
-
-    const pairs = await response.json();
-    const pair = pairs.find(p =>
-      p.pairAddress?.toLowerCase() === pairAddress.toLowerCase()
-    ) || pairs.find(p =>
-      p.baseToken?.address?.toLowerCase() === token.toLowerCase() &&
-      p.quoteToken?.symbol?.toUpperCase() === "WETH"
-    );
-
-    if (!pair) {
-      el("status").textContent =
-        "Pool belum ditemukan melalui API. Cek DEX Screener.";
-      return;
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Driftwood DRFT</title>
+  <style>
+    body {
+      background: #10141d;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 30px 20px;
+      text-align: center;
     }
-
-    const usd = n => n == null
-      ? "Belum tersedia"
-      : "$" + Number(n).toLocaleString("en-US", {
-          maximumFractionDigits: 10
-        });
-
-    el("price").textContent = usd(pair.priceUsd);
-    el("change").textContent =
-      pair.priceChange?.h24 == null
-        ? "Belum tersedia"
-        : Number(pair.priceChange.h24).toFixed(2) + "%";
-    el("volume").textContent = usd(pair.volume?.h24);
-    el("liquidity").textContent = usd(pair.liquidity?.usd);
-    el("cap").textContent = usd(pair.marketCap ?? pair.fdv);
-    el("status").textContent =
-      "Data DRFT/WETH berhasil diperbarui.";
-  } catch (error) {
-    el("status").textContent =
-      "Gagal memuat data. Coba refresh lagi.";
-  }
-}
-
-loadMarket();
-</script>
+    .card {
+      background: #20293a;
+      padding: 24px;
+      border-radius: 12px;
+      max-width: 500px;
+      margin: 30px auto;
+    }
+    a { color: #a7f3c0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Driftwood (DRFT)</h1>
+    <p>Dashboard berhasil dibuka!</p>
+    <p>Token Contract:</p>
+    <p>0x6abbaE6B3086e6502fb447D6F1D1d5Dc18d43428</p>
+    <a href="https://dexscreener.com/robinhood/0xa42089070f4e8078debbee9bb272cf8b4ecc5fea">
+      Lihat chart DRFT
+    </a>
+  </div>
+</body>
+</html>
