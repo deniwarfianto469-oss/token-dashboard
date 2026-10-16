@@ -4,133 +4,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Token Dashboard</title>
+<title>Driftwood (DRFT) Dashboard</title>
 <style>
-body{font-family:Arial;background:#10141d;color:white;padding:24px;max-width:750px;margin:auto}
+body{font-family:Arial,sans-serif;background:#10141d;color:#fff;padding:20px;max-width:850px;margin:auto}
 .card{background:#20293a;padding:20px;margin:16px 0;border-radius:14px;overflow-wrap:anywhere}
 p{line-height:1.6;color:#d1d8e5}
 a,button{display:inline-block;padding:12px;margin:5px;background:#a7f3c0;color:#102219;border:0;border-radius:8px;text-decoration:none;cursor:pointer}
+iframe{width:100%;height:500px;border:0;border-radius:12px}
 </style>
 </head>
 <body>
-<h1>🚀 Token Dashboard</h1>
-<p>Robinhood Chain</p>
+<h1>🌲 Driftwood (DRFT)</h1>
+<p>Token Dashboard · Robinhood Chain</p>
+
 <div class="card">
 <h2>Informasi Token</h2>
-
-<h2>📈 Driftwood (DRFT) Live Chart</h2>
-
-<iframe
-  src="https://dexscreener.com/robinhood/0xa42089070f4e8078debbee9bb272cf8b4ecc5fea?embed=1&theme=dark"
-  width="100%"
-  height="500"
-  style="border:0; border-radius:12px;"
-  loading="lazy">
-</iframe>
-
-
-<iframe
-  src="https://dexscreener.com/robinhood/0xa42089070f4e8078debbee9bb272cf8b4ecc5fea?embed=1&theme=dark"
-  width="100%"
-  height="500"
-  style="border:0;border-radius:12px"
-  loading="lazy">
-</iframe>
+<p>Nama: Driftwood</p>
+<p>Simbol: DRFT</p>
 <p>Contract address:</p>
 <p id="contract">0x6abbaE6B3086e6502fb447D6F1D1d5Dc18d43428</p>
-<button onclick="navigator.clipboard.writeText(document.getElementById('contract').textContent).then(()=>alert('Disalin')).catch(()=>alert('Silakan salin manual'))">Salin alamat</button>
+<button onclick="navigator.clipboard.writeText(document.getElementById('contract').textContent).then(()=>alert('Alamat disalin')).catch(()=>alert('Silakan salin alamat secara manual'))">Salin alamat</button>
 </div>
-<div class="card">
 
 <div class="card">
-  <h2>📊 Driftwood (DRFT) Market Dashboard</h2>
-  <p id="market-status">Mengambil data market...</p>
+<h2>📊 Market Dashboard</h2>
+<p id="status">Memuat data market...</p>
+<p>Harga: <strong id="price">—</strong></p>
+<p>Perubahan 24 jam: <strong id="change">—</strong></p>
+<p>Volume 24 jam: <strong id="volume">—</strong></p>
+<p>Likuiditas: <strong id="liquidity">—</strong></p>
+<p>Market cap / FDV: <strong id="cap">—</strong></p>
+<button onclick="loadMarket()">Refresh data</button>
+</div>
 
-  <p>Harga: <strong id="market-price">—</strong></p>
-  <p>Perubahan 24 jam: <strong id="market-change">—</strong></p>
-  <p>Volume 24 jam: <strong id="market-volume">—</strong></p>
-  <p>Likuiditas: <strong id="market-liquidity">—</strong></p>
-  <p>Market cap: <strong id="market-cap">—</strong></p>
+<div class="card">
+<h2>📈 Driftwood (DRFT) Live Chart</h2>
+<iframe src="https://dexscreener.com/robinhood/0xa42089070f4e8078debbee9bb272cf8b4ecc5fea?embed=1&theme=dark" title="Driftwood chart" loading="lazy"></iframe>
+<p><a href="https://dexscreener.com/robinhood/0xa42089070f4e8078debbee9bb272cf8b4ecc5fea" target="_blank" rel="noopener">Buka DEX Screener</a>
+<a href="https://robinhoodchain.blockscout.com/address/0x6abbaE6B3086e6502fb447D6F1D1d5Dc18d43428" target="_blank" rel="noopener">Buka Explorer</a></p>
+</div>
 
-  <button onclick="loadMarket()">Refresh data</button>
+<div class="card">
+<h2>Tentang Proyek</h2>
+<p>Driftwood (DRFT) di Robinhood Chain.</p>
+<p>Kripto berisiko tinggi. Tidak ada jaminan keuntungan.</p>
 </div>
 
 <script>
-async function loadMarket() {
-  const status = document.getElementById("market-status");
-  status.textContent = "Mengambil data terbaru...";
-
-  try {
-    const url =
-      "https://api.dexscreener.com/latest/dex/pairs/robinhood/0xa42089070f4e8078debbee9bb272cf8b4ecc5fea";
-
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Data tidak tersedia");
-
-    const result = await response.json();
-    const pair = result.pairs?.[0];
-
-    if (!pair) {
-      status.textContent =
-        "Pair belum ditemukan di DEX Screener. Data market belum tersedia.";
-      return;
-    }
-
-    const money = n => n == null
-      ? "Belum tersedia"
-      : "$" + Number(n).toLocaleString("en-US", {
-          maximumFractionDigits: 8
-        });
-
-    document.getElementById("market-price").textContent =
-      money(pair.priceUsd);
-
-    document.getElementById("market-change").textContent =
-      pair.priceChange?.h24 == null
-        ? "Belum tersedia"
-        : Number(pair.priceChange.h24).toFixed(2) + "%";
-
-    document.getElementById("market-volume").textContent =
-      money(pair.volume?.h24);
-
-    document.getElementById("market-liquidity").textContent =
-      money(pair.liquidity?.usd);
-
-    document.getElementById("market-cap").textContent =
-      money(pair.marketCap ?? pair.fdv);
-
-    status.textContent = "Data berhasil diperbarui.";
-  } catch (error) {
-    status.textContent =
-      "Gagal mengambil data. Coba refresh beberapa saat lagi.";
+async function loadMarket(){
+ const el=id=>document.getElementById(id);
+ el("status").textContent="Mengambil data market...";
+ try{
+  const r=await fetch("https://api.dexscreener.com/latest/dex/pairs/robinhood/0xa42089070f4e8078debbee9bb272cf8b4ecc5fea");
+  if(!r.ok)throw Error("API tidak tersedia");
+  const d=await r.json();
+  const p=d.pairs?.[0];
+  if(!p){
+   el("status").textContent="Pair belum ditemukan di API DEX Screener. Data market belum tersedia.";
+   return;
   }
+  const usd=n=>n==null?"Belum tersedia":"$"+Number(n).toLocaleString("en-US",{maximumFractionDigits:8});
+  el("price").textContent=usd(p.priceUsd);
+  el("change").textContent=p.priceChange?.h24==null?"Belum tersedia":Number(p.priceChange.h24).toFixed(2)+"%";
+  el("volume").textContent=usd(p.volume?.h24);
+  el("liquidity").textContent=usd(p.liquidity?.usd);
+  el("cap").textContent=usd(p.marketCap??p.fdv);
+  el("status").textContent="Data market berhasil dimuat.";
+ }catch(e){
+  el("status").textContent="Data gagal dimuat. Coba refresh lagi nanti.";
+ }
 }
-
 loadMarket();
 </script>
-
-<p id="status">Data pasar perlu diverifikasi.</p>
-<p>Harga, volume, dan likuiditas akan ditampilkan setelah sumber data tersedia.</p>
-</div>
-<div class="card">
-<h2>📈 Driftwood (DRFT) Live Chart</h2>
-
-<iframe
-  src="https://dexscreener.com/robinhood/0xa42089070f4e8078debbee9bb272cf8b4ecc5fea?embed=1&theme=dark"
-  width="100%"
-  height="500"
-  style="border:0;border-radius:12px"
-  loading="lazy"
-  allowfullscreen>
-</iframe>
-<a href="https://dexscreener.com/robinhood/0xa42089070f4e8078debbee9bb272cf8b4ecc5fea" target="_blank" rel="noopener">Buka DEX Screener</a>
-<a href="https://robinhoodchain.blockscout.com/address/0x6abbaE6B3086e6502fb447D6F1D1d5Dc18d43428" target="_blank" rel="noopener">Buka Explorer</a>
-</div>
-<div class="card">
-<h2>Tentang Proyek</h2>
-<p>Tambahkan deskripsi proyek dan tujuan token di sini.</p>
-<p>Kripto berisiko tinggi. Tidak ada jaminan keuntungan.</p>
-</div>
 </body>
 </html>
-
