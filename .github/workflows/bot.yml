@@ -1,4 +1,4 @@
-
+```yaml
 name: DRFT Market Bot
 
 on:
@@ -15,5 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Siapkan Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Jalankan bot DRFT
-        run: python bot.py
+        env:
+          ROBINHOOD_RPC_URL: ${{ secrets.ROBINHOOD_RPC_URL }}
+        run: python -u bot.py
+```
