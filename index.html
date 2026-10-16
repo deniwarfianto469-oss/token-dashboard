@@ -41,7 +41,74 @@ a,button{display:inline-block;padding:12px;margin:5px;background:#a7f3c0;color:#
 <button onclick="navigator.clipboard.writeText(document.getElementById('contract').textContent).then(()=>alert('Disalin')).catch(()=>alert('Silakan salin manual'))">Salin alamat</button>
 </div>
 <div class="card">
-<h2>📊 Market Dashboard</h2>
+
+<div class="card">
+  <h2>📊 Driftwood (DRFT) Market Dashboard</h2>
+  <p id="market-status">Mengambil data market...</p>
+
+  <p>Harga: <strong id="market-price">—</strong></p>
+  <p>Perubahan 24 jam: <strong id="market-change">—</strong></p>
+  <p>Volume 24 jam: <strong id="market-volume">—</strong></p>
+  <p>Likuiditas: <strong id="market-liquidity">—</strong></p>
+  <p>Market cap: <strong id="market-cap">—</strong></p>
+
+  <button onclick="loadMarket()">Refresh data</button>
+</div>
+
+<script>
+async function loadMarket() {
+  const status = document.getElementById("market-status");
+  status.textContent = "Mengambil data terbaru...";
+
+  try {
+    const url =
+      "https://api.dexscreener.com/latest/dex/pairs/robinhood/0xa42089070f4e8078debbee9bb272cf8b4ecc5fea";
+
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Data tidak tersedia");
+
+    const result = await response.json();
+    const pair = result.pairs?.[0];
+
+    if (!pair) {
+      status.textContent =
+        "Pair belum ditemukan di DEX Screener. Data market belum tersedia.";
+      return;
+    }
+
+    const money = n => n == null
+      ? "Belum tersedia"
+      : "$" + Number(n).toLocaleString("en-US", {
+          maximumFractionDigits: 8
+        });
+
+    document.getElementById("market-price").textContent =
+      money(pair.priceUsd);
+
+    document.getElementById("market-change").textContent =
+      pair.priceChange?.h24 == null
+        ? "Belum tersedia"
+        : Number(pair.priceChange.h24).toFixed(2) + "%";
+
+    document.getElementById("market-volume").textContent =
+      money(pair.volume?.h24);
+
+    document.getElementById("market-liquidity").textContent =
+      money(pair.liquidity?.usd);
+
+    document.getElementById("market-cap").textContent =
+      money(pair.marketCap ?? pair.fdv);
+
+    status.textContent = "Data berhasil diperbarui.";
+  } catch (error) {
+    status.textContent =
+      "Gagal mengambil data. Coba refresh beberapa saat lagi.";
+  }
+}
+
+loadMarket();
+</script>
+
 <p id="status">Data pasar perlu diverifikasi.</p>
 <p>Harga, volume, dan likuiditas akan ditampilkan setelah sumber data tersedia.</p>
 </div>
