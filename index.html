@@ -1,1 +1,43 @@
 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Dashboard</title>
+<style>
+body{font-family:Arial;background:#10141d;color:white;padding:24px;max-width:750px;margin:auto}
+.card{background:#20293a;padding:20px;margin:16px 0;border-radius:14px;overflow-wrap:anywhere}
+p{line-height:1.6;color:#d1d8e5}
+a,button{display:inline-block;padding:12px;margin:5px;background:#a7f3c0;color:#102219;border:0;border-radius:8px;text-decoration:none;cursor:pointer}
+</style>
+</head>
+<body>
+<h1>🚀 Token Dashboard</h1>
+<p>Robinhood Chain</p>
+<div class="card">
+<h2>Informasi Token</h2>
+<p>Nama: Isi nama token kamu</p>
+<p>Simbol: Isi simbol token kamu</p>
+<p>Contract address:</p>
+<p id="contract">0x6abbaE6B3086e6502fb447D6F1D1d5Dc18d43428</p>
+<button onclick="navigator.clipboard.writeText(document.getElementById('contract').textContent).then(()=>alert('Disalin')).catch(()=>alert('Silakan salin manual'))">Salin alamat</button>
+</div>
+<div class="card">
+<h2>📊 Market Dashboard</h2>
+<p id="status">Data pasar perlu diverifikasi.</p>
+<p>Harga, volume, dan likuiditas akan ditampilkan setelah sumber data tersedia.</p>
+</div>
+<div class="card">
+<h2>📈 Chart Token</h2>
+<a href="https://dexscreener.com/robinhood/0xa42089070f4e8078debbee9bb272cf8b4ecc5fea" target="_blank" rel="noopener">Buka DEX Screener</a>
+<a href="https://robinhoodchain.blockscout.com/address/0x6abbaE6B3086e6502fb447D6F1D1d5Dc18d43428" target="_blank" rel="noopener">Buka Explorer</a>
+</div>
+<div class="card">
+<h2>Tentang Proyek</h2>
+<p>Tambahkan deskripsi proyek dan tujuan token di sini.</p>
+<p>Kripto berisiko tinggi. Tidak ada jaminan keuntungan.</p>
+</div>
+</body>
+</html>
+
