@@ -2,7 +2,9 @@
 import json
 import urllib.request
 
-RPC = "https://rpc.mainnet.chain.robinhood.com"
+import os
+
+RPC = os.environ["ROBINHOOD_RPC_URL"]
 TOKEN = "0x6abbaE6B3086e6502fb447D6F1D1d5Dc18d43428"
 POOL = "0xa42089070f4e8078debbee9bb272cf8b4ecc5fea"
 
